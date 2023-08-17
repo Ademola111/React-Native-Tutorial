@@ -1,0 +1,6 @@
+<View style={styles.btn}>
+        <Image source={require("./assets/ademola.jpg")}/>
+        <Text>Best Tutorial Platform</Text>
+        <Button title='Login'  />
+      </View>
+      {/* <Image source={require(ademola.uri)} /> */}

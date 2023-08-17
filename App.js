@@ -1,66 +1,66 @@
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, View, Image, Button, TextInput} from 'react-native';
-
+import { StyleSheet, Text, View, Image, Button, TextInput, FlatList, ScrollView} from 'react-native';
+import Goalitem from './components/goalitem';
+import GoalInput from './components/goalinput';
 // const ademola={
 //   uri:'./assets/ademola.jpg',
 // }
 
 export default function App() {
-  const [enteredGoalText, setEnterGoalText] = useState("");
   const [courseGoals, setCourseGoals] = useState([]);
 
-function goalInputHandler(enteredText){
-  setEnterGoalText(enteredText);
-  // console.log(enteredText);
-};
-function addGoalHandler(){
-  setCourseGoals(currentCourseGoal => [...currentCourseGoal, enteredGoalText,])
+
+function addGoalHandler(enteredGoalText){
+  setCourseGoals(currentCourseGoal => 
+    [...currentCourseGoal, {text:enteredGoalText, 
+      id:Math.random().toString()},])
   // console.log(enteredGoalText);
 };
 
   return (
     <View style={styles.mainbody}>
       <View style={styles.container}>
-        <Image style={styles.imagesize} source={require("./assets/ademola.jpg")}/>
-        <Text style={styles.Titlestyle}>Tutorial</Text>
+          <Image style={styles.imagesize} source={require("./assets/ademola.jpg")}/>
+          <Text style={styles.Titlestyle}>Tutorial</Text>
       </View>
-      <View style={styles.textinputstyle}>
-        <TextInput style={styles.inputstyle} 
-        placeholder='Enter your username' 
-        onChangeText={goalInputHandler} />
-        <Button title='Add Name' onPress={addGoalHandler}/>
-      </View>
-      <View style={styles.goalstyle}>
-        {courseGoals.map((goal) => (
-        <View style={styles.goal} key={goal}>
-          <Text style={styles.goals} > {goal} </Text>
-        </View> ))}
-        
-      </View>
-      <View style={styles.btn}>
-        <Image source={require("./assets/ademola.jpg")}/>
-        <Text>Best Tutorial Platform</Text>
-        <Button title='Login'  />
+      <View>
+        <GoalInput onAddGoal={addGoalHandler} />
       </View>
       
+      
+      <View style={styles.goalstyle}>
+        <FlatList 
+          data={courseGoals} 
+          renderItem={(itemData) => { 
+            return <Goalitem text={itemData.item.text} />;
+          }}
+          keyExtractor={(item, index) => {
+            return item.id;
+          }}
+        />
 
-      {/* <Image source={require(ademola.uri)} /> */}
-      <StatusBar style="auto" />
+          {/* {courseGoals.map((goal) => ( not needed in Flatlist
+          <View style={styles.goal} key={goal}>
+            <Text style={styles.goals} > {goal} </Text>
+          </View>))}  */}
+        
+      </View>
+      
+      {/* <StatusBar style="auto" /> */}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   mainbody: {
-    flex:1,
+    // flex:1,
     flexDirection:'column',
     justifyContent:'space-between',
     marginLeft: 24,
     marginRight: 24,
-    
   },
-  
+
   container: {
     marginTop: 64,
     flexDirection: 'row',
@@ -81,30 +81,7 @@ const styles = StyleSheet.create({
     height:50,
     borderRadius:10,
     marginBottom:24,
-
-  },
-
-  btn:{
-    flex:1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  textinputstyle: {
-    flexDirection: "row",
-    justifyContent:"space-between",
-    marginTop:24,
-  },
-
-  inputstyle: {
-    color:"blue",
-    borderWidth:1,
-    borderColor:"blue",
-    width:'75%',
-    padding:5,
-    borderRadius:10,
-  },
+  },  
 
   goalstyle: {
     flexDirection: "column",
@@ -113,16 +90,11 @@ const styles = StyleSheet.create({
     borderRadius:8,
   },
 
-  goals: {
-    color: 'white',
+  btn:{
+    flex:1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-
-  goal: {
-    backgroundColor: 'lightblue',
-    padding: 10,
-    margin: 10,
-    fontSize: 12,
-    borderRadius:8,
-  }
 
 });
